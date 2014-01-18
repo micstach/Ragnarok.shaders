@@ -1,0 +1,53 @@
+<Source name = "Normal mapping">
+	<Vertex>
+  	<Init>
+      <Uniforms count ="1">
+        <Uniform value ="uniform mat4 uni_Transformation ;"/>
+      </Uniforms>
+      <Attributes count="2">
+        <Attribute value ="attribute vec3 attrib_Tangent ;"/>
+        <Attribute value ="attribute vec3 attrib_Binormal ;"/>
+      </Attributes>
+      <Varyings count="3">
+        <Varying value ="varying vec3 var_Normal ;/>"
+        <Varying value ="varying vec3 var_Tangent ;/>"
+        <Varying value ="varying vec3 var_Binormal ;/>"
+      </Varyings>
+    </Init>
+    <Main>
+      <Code>
+        <Lines count ="6">
+          <Line value = "vec4 Normal  = vec4(gl_Normal, 0.0) ;"/>
+          <Line value = "vec4 Binormal = vec4(attrib_Binormal, 0.0) ;"/>
+          <Line value = "vec4 Tangent = vec4(attrib_Tangent, 0.0) ;"/>
+          <Line value = "var_Normal = normalize(vec3(uni_Transformation * Normal));"/>
+          <Line value = "var_Tangent = normalize(vec3(uni_Transformation * Tangent)) ;"/>
+          <Line value = "var_Binormal = normalize(vec3(uni_Transformation * Binormal)) ;"/>
+        </Lines>
+      </Code>
+    </Main>
+  </Vertex>
+	<Fragment>
+    <Init>
+      <Uniforms count="1">
+        <Uniform value = "uniform sampler2D uni_Normal ;"/>
+      </Uniforms>
+      <Varyings count="3">
+        <Varying value = "varying vec3 var_Normal ;"/>
+        <Varying value = "varying vec3 var_Tangent ;"/>
+        <Varying value = "varying vec3 var_Binormal ;"/>
+      </Varyings>
+    </Init>
+    <Main>
+      <Code>
+        <Lines count="5">
+          <Line value="vec3 normal = texture2DLod(uni_Normal, texCoords, mipmap).rgb ;"/>
+          <Line value="normal = (2.0 * normal) - 1.0 ;"/>
+          <Line value="normal = vec3(normal.x, normal.z, -normal.y) ;"/>
+          <Line value="mat3 tangentSpace = mat3(var_Tangent, var_Normal, var_Binormal) ;"/>
+          <Line value="vec3 N = tangentSpace * normal ;"/>
+        </Lines>
+      </Code>
+    </Main>
+	</Fragment>	
+</Source>

@@ -1,0 +1,35 @@
+<Source name = "MixDiffuse">
+  <Vertex>
+    <Init>
+      <Uniforms count ="0"/>
+      <Attributes count="0"/>
+      <Varyings count="1">
+        <Varying value ="varying float var_Mix ;/>"
+      </Varyings>
+    </Init>
+    <Main>
+      <Code>
+        <Lines count ="1">
+          <Line value = "var_Mix = gl_Color.r ;"/>
+        </Lines>
+      </Code>
+    </Main>
+  </Vertex>
+  <Fragment>
+    <Init>
+      <Uniforms count="0"/>
+      <Varyings count="1">
+        <Varying value = "varying float var_MixCoeff ;"/>
+      </Varyings>
+    </Init>
+    <Main>
+      <Code>
+        <Lines count="3">
+          <Line value="vec4 diffuse = texture2D(uni_Diffuse, texcoords) ;"/>
+          <Line value="vec4 diffuse2 = texture2D(uni_Diffuse, texcoords) ;"/>
+          <Line value="diffuse = diffuse + (diffuse + diffuse2) * var_Mix ;"/>
+        </Lines>
+      </Code>
+    </Main>
+  </Fragment>
+</Source>
